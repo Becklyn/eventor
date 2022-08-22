@@ -9,7 +9,7 @@ type UnsubscribeFn func()
 // A subscriber has to be passed on which the internal handler gets registered.
 // A topic needs to be passed from which the subscriber will receive events.
 // The method returns a function to unsubscribe the handler.
-func On[T any](handlerFn func(data T) error, subscriber Subscriber, topic string) (UnsubscribeFn, error) {
+func On[T any](handlerFn func(event T) error, subscriber Subscriber, topic string) (UnsubscribeFn, error) {
 	handler := func(e cloudevents.Event) error {
 		var event T
 		if err := e.DataAs(&event); err != nil {

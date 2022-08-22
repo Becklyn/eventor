@@ -2,7 +2,7 @@
 
 🔮 A minimalistic library for abstracting pub/sub operations
 
-&rarr; Eventor is [clerk](https://github.com/Becklyn/clerk) for pub/sub 😉
+&rarr; *eventor* is [clerk](https://github.com/Becklyn/clerk) for pub/sub 😉
 
 ## Installation 
 
