@@ -1,6 +1,6 @@
 module github.com/Becklyn/eventor
 
-go 1.19
+go 1.18
 
 require github.com/cloudevents/sdk-go/v2 v2.11.0
 
