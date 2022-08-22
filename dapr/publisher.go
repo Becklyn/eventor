@@ -17,33 +17,29 @@ var (
 
 // DaprPublisherConfig is the configuration struct for a publisher.
 type DaprPublisherConfig struct {
-	Hostname string
-	Port     string
-	Pubsub   string
+	Host   string
+	Pubsub string
 }
 
 type daprPublisher struct {
-	client   *http.Client
-	hostname string
-	port     string
-	pubsub   string
+	client *http.Client
+	host   string
+	pubsub string
 }
 
 // NewDaprPublisher creates a new publisher instance.
 func NewDaprPublisher(config DaprPublisherConfig) *daprPublisher {
 	return &daprPublisher{
-		client:   http.DefaultClient,
-		hostname: config.Hostname,
-		port:     config.Port,
-		pubsub:   config.Pubsub,
+		client: http.DefaultClient,
+		host:   config.Host,
+		pubsub: config.Pubsub,
 	}
 }
 
 func (p *daprPublisher) Publish(topic string, data any) error {
 	url := fmt.Sprintf(
-		"http://%s:%s/v1.0/publish/%s/%s",
-		p.hostname,
-		p.port,
+		"%s/v1.0/publish/%s/%s",
+		p.host,
 		p.pubsub,
 		topic,
 	)
