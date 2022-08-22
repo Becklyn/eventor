@@ -23,7 +23,7 @@ func On[T any](handlerFn func(data T) error, subscriber Subscriber, topic string
 	}
 
 	unsubscribe := func() {
-		subscriber.Unsubscribe(handler)
+		_ = subscriber.Unsubscribe(handler)
 	}
 
 	return unsubscribe, nil
@@ -57,7 +57,7 @@ func Chan[T any](subscriber Subscriber, topic string, match ...func(event T) boo
 
 	unsubscribe := func() {
 		close(eventChan)
-		subscriber.Unsubscribe(handler)
+		_ = subscriber.Unsubscribe(handler)
 	}
 
 	return eventChan, unsubscribe, nil
