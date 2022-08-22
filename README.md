@@ -55,7 +55,7 @@ if err := publisher.Publish("topic", Message{
 }
 ```
 
-### Subscribe
+### Subscribe with handler function
 
 ```go
 type Message struct {
