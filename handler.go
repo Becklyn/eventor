@@ -37,27 +37,18 @@ func On[T any](handlerFn func(event T) error, subscriber Subscriber, topic strin
 func Chan[T any](subscriber Subscriber, topic string, match ...func(event T) bool) (<-chan T, UnsubscribeFn, error) {
 	eventChan := make(chan T)
 
-	handler := func(e cloudevents.Event) error {
-		var event T
-		if err := e.DataAs(&event); err != nil {
-			return nil
-		}
+	unsubscribe, err := On(func(event T) error {
 		if len(match) == 1 && !match[0](event) {
 			return nil
 		}
 		eventChan <- event
 		return nil
-	}
-
-	if err := subscriber.Subscribe(topic, handler); err != nil {
+	}, subscriber, topic)
+	if err != nil {
 		return nil, func() {
 			close(eventChan)
+			unsubscribe()
 		}, err
-	}
-
-	unsubscribe := func() {
-		close(eventChan)
-		_ = subscriber.Unsubscribe(handler)
 	}
 
 	return eventChan, unsubscribe, nil
