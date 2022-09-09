@@ -6,6 +6,9 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+
+	"github.com/Becklyn/eventor/tracing"
+	"go.opentelemetry.io/otel/trace"
 )
 
 var (
@@ -36,7 +39,7 @@ func NewDaprPublisher(config DaprPublisherConfig) *daprPublisher {
 	}
 }
 
-func (p *daprPublisher) Publish(topic string, data any) error {
+func (p *daprPublisher) Publish(topic string, data any, spanCtx ...trace.SpanContext) error {
 	url := fmt.Sprintf(
 		"%s/v1.0/publish/%s/%s",
 		p.host,
@@ -60,6 +63,14 @@ func (p *daprPublisher) Publish(topic string, data any) error {
 	}
 
 	req.Header.Set("Content-Type", "application/json")
+
+	if len(spanCtx) == 1 && spanCtx[0].IsValid() {
+		traceparent, treacestate := tracing.ToHeaders(spanCtx[0])
+		req.Header.Set("traceparent", traceparent)
+		if len(treacestate) > 0 {
+			req.Header.Set("tracestate", treacestate)
+		}
+	}
 
 	res, err := p.client.Do(req)
 	if err != nil {

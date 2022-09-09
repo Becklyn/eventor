@@ -6,6 +6,7 @@ import (
 	"sync"
 
 	"github.com/Becklyn/eventor"
+	"github.com/Becklyn/eventor/tracing"
 	"github.com/gofiber/fiber/v2"
 	"github.com/samber/lo"
 
@@ -107,6 +108,8 @@ func (r *daprSubscriberRegistry) bind(subscriber *daprSubscriber) {
 			return ctx.SendStatus(fiber.StatusInternalServerError)
 		}
 
+		spanCtx := tracing.FromFiberContext(ctx)
+
 		wg := sync.WaitGroup{}
 		errors := []error{}
 
@@ -114,7 +117,7 @@ func (r *daprSubscriberRegistry) bind(subscriber *daprSubscriber) {
 			wg.Add(1)
 			go func(handler eventor.HandlerFn) {
 				defer wg.Done()
-				if err := handler(event); err != nil {
+				if err := handler(event, spanCtx); err != nil {
 					errors = append(errors, err)
 				}
 			}(handler)

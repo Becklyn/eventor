@@ -2,7 +2,10 @@ module github.com/Becklyn/eventor
 
 go 1.18
 
-require github.com/cloudevents/sdk-go/v2 v2.11.0
+require (
+	github.com/cloudevents/sdk-go/v2 v2.11.0
+	go.opentelemetry.io/otel/trace v1.9.0
+)
 
 require (
 	github.com/andybalholm/brotli v1.0.4 // indirect
@@ -10,6 +13,7 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.38.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
+	go.opentelemetry.io/otel v1.9.0 // indirect
 	golang.org/x/exp v0.0.0-20220303212507-bbda1eaf7a17 // indirect
 	golang.org/x/sys v0.0.0-20220227234510-4e6760a101f9 // indirect
 )

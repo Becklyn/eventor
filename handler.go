@@ -1,6 +1,10 @@
 package eventor
 
-import cloudevents "github.com/cloudevents/sdk-go/v2"
+import (
+	"context"
+
+	cloudevents "github.com/cloudevents/sdk-go/v2"
+)
 
 // UnsubscribeFn is a function to unsubscribe a handler.
 type UnsubscribeFn func()
@@ -9,13 +13,13 @@ type UnsubscribeFn func()
 // A subscriber has to be passed on which the internal handler gets registered.
 // A topic needs to be passed from which the subscriber will receive events.
 // The method returns a function to unsubscribe the handler.
-func On[T any](handlerFn func(event T) error, subscriber Subscriber, topic string) (UnsubscribeFn, error) {
-	handler := func(e cloudevents.Event) error {
+func On[T any](handlerFn func(event T, spanContext context.Context) error, subscriber Subscriber, topic string) (UnsubscribeFn, error) {
+	handler := func(e cloudevents.Event, spanContext context.Context) error {
 		var event T
 		if err := e.DataAs(&event); err != nil {
 			return nil
 		}
-		return handlerFn(event)
+		return handlerFn(event, spanContext)
 	}
 
 	if err := subscriber.Subscribe(topic, handler); err != nil {
@@ -37,7 +41,7 @@ func On[T any](handlerFn func(event T) error, subscriber Subscriber, topic strin
 func Chan[T any](subscriber Subscriber, topic string, match ...func(event T) bool) (<-chan T, UnsubscribeFn, error) {
 	eventChan := make(chan T)
 
-	handler := func(e cloudevents.Event) error {
+	handler := func(e cloudevents.Event, spanContext context.Context) error {
 		var event T
 		if err := e.DataAs(&event); err != nil {
 			return nil
