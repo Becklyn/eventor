@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"sync"
 
-	"github.com/Becklyn/eventor"
-	"github.com/Becklyn/eventor/tracing"
+	"github.com/Becklyn/eventor/v2"
+	tracing "github.com/Becklyn/eventor/v2/tracing"
 	"github.com/gofiber/fiber/v2"
 	"github.com/samber/lo"
 

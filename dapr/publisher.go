@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/Becklyn/eventor/tracing"
+	"github.com/Becklyn/eventor/v2/tracing"
 	"go.opentelemetry.io/otel/trace"
 )
 
