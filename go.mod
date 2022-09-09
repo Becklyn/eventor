@@ -1,4 +1,4 @@
-module github.com/Becklyn/eventor
+module github.com/Becklyn/eventor/v2
 
 go 1.18
 
