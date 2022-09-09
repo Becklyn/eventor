@@ -1,9 +1,13 @@
 package eventor
 
-import cloudevents "github.com/cloudevents/sdk-go/v2"
+import (
+	"context"
+
+	cloudevents "github.com/cloudevents/sdk-go/v2"
+)
 
 // HandlerFn is a function that is called when a cloudevent is received at a subscriber.
-type HandlerFn func(event cloudevents.Event) error
+type HandlerFn func(event cloudevents.Event, parentSpanCtx context.Context) error
 
 type Subscriber interface {
 	// Subscribe registers a subscriber at the registry.
